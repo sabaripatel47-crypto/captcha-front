@@ -1,0 +1,193 @@
+
+.captcha-container.data-v-3ffbf53c {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.captcha-box.data-v-3ffbf53c {
+  background: #fff;
+  border-radius: 12px;
+  width: 360px;
+  max-width: 95vw;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+.captcha-header.data-v-3ffbf53c {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+.captcha-title.data-v-3ffbf53c {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+.captcha-tip.data-v-3ffbf53c {
+  font-size: 12px;
+  color: #999;
+  margin-left: 8px;
+}
+.captcha-close.data-v-3ffbf53c {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.close-icon.data-v-3ffbf53c {
+  font-size: 22px;
+  color: #999;
+  line-height: 1;
+}
+.captcha-body.data-v-3ffbf53c {
+  position: relative;
+  margin: 12px;
+}
+.captcha-canvas.data-v-3ffbf53c {
+  display: block;
+  border-radius: 6px;
+}
+.captcha-canvas-overlay.data-v-3ffbf53c {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 6px;
+}
+.captcha-loading.data-v-3ffbf53c {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.loading-spinner.data-v-3ffbf53c {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #007aff;
+  border-radius: 50%;
+  -webkit-animation: spin-data-v-3ffbf53c 0.8s linear infinite;
+          animation: spin-data-v-3ffbf53c 0.8s linear infinite;
+}
+@-webkit-keyframes spin-data-v-3ffbf53c {
+to { -webkit-transform: rotate(360deg); transform: rotate(360deg);
+}
+}
+@keyframes spin-data-v-3ffbf53c {
+to { -webkit-transform: rotate(360deg); transform: rotate(360deg);
+}
+}
+.loading-text.data-v-3ffbf53c {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+}
+.captcha-refresh.data-v-3ffbf53c {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.refresh-icon.data-v-3ffbf53c {
+  font-size: 16px;
+  color: #fff;
+}
+.slider-container.data-v-3ffbf53c {
+  margin: 12px auto;
+  width: 320px;
+  position: relative;
+  height: 40px;
+}
+.slider-track.data-v-3ffbf53c {
+  position: relative;
+  width: 320px;
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.slider-progress.data-v-3ffbf53c {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #4a90e2, #67aaf5);
+  border-radius: 20px;
+}
+.slider-thumb.data-v-3ffbf53c {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  touch-action: none;
+  cursor: grab;
+}
+.slider-thumb.data-v-3ffbf53c:active {
+  cursor: grabbing;
+}
+.thumb-icon.data-v-3ffbf53c {
+  font-size: 16px;
+  color: #4a90e2;
+}
+.slider-hint.data-v-3ffbf53c {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: #aaa;
+  pointer-events: none;
+  z-index: 1;
+}
+.captcha-message.data-v-3ffbf53c {
+  text-align: center;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-top: 1px solid #eee;
+}
+.captcha-message.info.data-v-3ffbf53c {
+  color: #007aff;
+}
+.captcha-message.success.data-v-3ffbf53c {
+  color: #4cd964;
+}
+.captcha-message.error.data-v-3ffbf53c {
+  color: #dd524d;
+}
+

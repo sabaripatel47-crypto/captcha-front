@@ -12021,7 +12021,12 @@ uni.addInterceptor({
 /* 42 */,
 /* 43 */,
 /* 44 */,
-/* 45 */
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */
 /*!************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
   \************************************************************************************************/
@@ -12030,11 +12035,11 @@ uni.addInterceptor({
 
 // TODO(Babel 8): Remove this file.
 
-var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 46)();
+var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 51)();
 module.exports = runtime;
 
 /***/ }),
-/* 46 */
+/* 51 */
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
   \*******************************************************************/
@@ -12355,7 +12360,7 @@ function _regeneratorRuntime() {
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 47 */
+/* 52 */
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
   \*****************************************************************/
@@ -12395,9 +12400,9 @@ function _asyncToGenerator(fn) {
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 48 */
+/* 53 */
 /*!************************************************************!*\
-  !*** D:/company project/captcha/front/captcha/api/test.js ***!
+  !*** D:/company project/captcha/front/captcha/api/user.js ***!
   \************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -12408,19 +12413,25 @@ module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exp
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getUserInfo = getUserInfo;
 exports.login = login;
-var _request = __webpack_require__(/*! @/utils/request */ 49);
-// 测试接口
-function login(params) {
+var _request = __webpack_require__(/*! @/utils/request */ 54);
+function login(data) {
   return (0, _request.request)({
-    url: "/hello",
-    method: "get",
-    data: params
+    url: "/api/user/login",
+    method: "post",
+    data: data
+  });
+}
+function getUserInfo() {
+  return (0, _request.request)({
+    url: "/api/user/info",
+    method: "get"
   });
 }
 
 /***/ }),
-/* 49 */
+/* 54 */
 /*!*****************************************************************!*\
   !*** D:/company project/captcha/front/captcha/utils/request.js ***!
   \*****************************************************************/
@@ -12439,21 +12450,75 @@ function request(options) {
   return new Promise(function (resolve, reject) {
     uni.request({
       url: BASE_URL + options.url,
+      //请求地址
       method: options.method || "GET",
+      //请求方式(默认get)
       data: options.data || {},
+      //请求传参
       header: {
-        "Content-Type": "application/json"
+        //请求头
+        "Content-Type": "application/json" //请求头类型
       },
+
       success: function success(res) {
         return resolve(res.data);
       },
+      //请求成功回调
       fail: function fail(err) {
         return reject(err);
-      }
+      } //请求失败回调
     });
   });
 }
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */
+/*!***************************************************************!*\
+  !*** D:/company project/captcha/front/captcha/api/captcha.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.checkVerifyToken = checkVerifyToken;
+exports.getCaptcha = getCaptcha;
+exports.verifyCaptcha = verifyCaptcha;
+var _request = __webpack_require__(/*! @/utils/request */ 54);
+function getCaptcha() {
+  return (0, _request.request)({
+    url: "/api/captcha/get",
+    method: "get"
+  });
+}
+function verifyCaptcha(data) {
+  return (0, _request.request)({
+    url: "/api/captcha/verify",
+    method: "post",
+    data: data
+  });
+}
+function checkVerifyToken(verifyToken) {
+  return (0, _request.request)({
+    url: "/api/captcha/check",
+    method: "post",
+    data: {
+      verifyToken: verifyToken
+    }
+  });
+}
 
 /***/ })
 ]]);

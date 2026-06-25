@@ -1,1 +1,1 @@
-<view><view>接口返回结果：</view><view>{{result}}</view><button data-event-opts="{{[['tap',[['handleRequest',['$event']]]]]}}" bindtap="__e">请求接口</button></view>
+<view class="_div"> 首页 </view>

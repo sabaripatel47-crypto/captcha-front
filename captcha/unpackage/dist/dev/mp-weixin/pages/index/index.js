@@ -135,65 +135,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 45));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 47));
-var _test = __webpack_require__(/*! @/api/test */ 48);
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  data: function data() {
-    return {
-      result: ""
-    };
-  },
-  methods: {
-    handleRequest: function handleRequest() {
-      var _this = this;
-      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-        var res;
-        return _regenerator.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return (0, _test.login)({
-                  name: "lisi"
-                });
-              case 3:
-                res = _context.sent;
-                console.log("接口返回：", res);
-
-                // 显示到页面
-                _this.result = res;
-                _context.next = 12;
-                break;
-              case 8:
-                _context.prev = 8;
-                _context.t0 = _context["catch"](0);
-                console.error("请求失败：", _context.t0);
-                _this.result = "请求失败";
-              case 12:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[0, 8]]);
-      }))();
-    }
-  }
-};
+var _default = {};
 exports.default = _default;
 
 /***/ })
