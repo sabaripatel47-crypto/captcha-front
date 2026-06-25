@@ -12445,7 +12445,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.request = request;
-var BASE_URL = "http://192.168.3.100:8080";
+// const BASE_URL = "http://192.168.3.100:8080";
+var BASE_URL = "http://192.168.1.2:8080";
 function request(options) {
   return new Promise(function (resolve, reject) {
     uni.request({

@@ -203,7 +203,8 @@ var _default = {
   },
   data: function data() {
     return {
-      canvasWidth: 320,
+      canvasWidth: 340,
+      //控制上方图片的宽度
       canvasHeight: 180,
       captchaId: "",
       imageBase64: "",
@@ -222,6 +223,7 @@ var _default = {
   },
   watch: {
     visible: function visible(val) {
+      //组件打开,重置数据并且获取验证码内容
       if (val) {
         this.reset();
         this.fetchCaptcha();
@@ -235,6 +237,7 @@ var _default = {
     });
   },
   methods: {
+    //重置所有数据
     reset: function reset() {
       this.sliderX = 0;
       this.track = [];
@@ -247,24 +250,30 @@ var _default = {
       this.imageBase64 = "";
       this.clearCanvas();
     },
+    //初始化canvas
     initCanvas: function initCanvas() {
       var _this2 = this;
-      var query = uni.createSelectorQuery().in(this);
+      var query = uni.createSelectorQuery().in(this); //当前组件实例(this)用于查询对应的元素
+      // 通过 uni.createSelectorQuery() 查询页面上 .captcha-canvas 这个 CSS 类的元素，获取它的宽高尺寸
+      // boundingClientRect:获取元素相对于可视界面的坐标和尺寸信息
       query.select('.captcha-canvas').boundingClientRect(function (rect) {
         if (rect) {
           _this2.canvasWidth = rect.width;
           _this2.canvasHeight = rect.height;
         }
-      }).exec();
+      }).exec(); //执行createSelectorQuery查询
     },
+    // 清除所有的canvas
     clearCanvas: function clearCanvas() {
-      var ctx = uni.createCanvasContext('captchaCanvas', this);
-      ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-      ctx.draw();
-      var ctx2 = uni.createCanvasContext('captchaOverlayCanvas', this);
-      ctx2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-      ctx2.draw();
+      var ctx = uni.createCanvasContext('captchaCanvas', this); //根据canvasid来获取对应canvas
+      ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight); //清除canvas内容
+      ctx.draw(); //绘制canvas
+
+      var ctx2 = uni.createCanvasContext('captchaOverlayCanvas', this); //根据canvasid来获取对应canvas
+      ctx2.clearRect(0, 0, this.canvasWidth, this.canvasHeight); //清除canvas内容
+      ctx2.draw(); //绘制canvas
     },
+    //获取验证密码内容
     fetchCaptcha: function fetchCaptcha() {
       var _this3 = this;
       return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -284,8 +293,8 @@ var _default = {
                   _context.next = 13;
                   break;
                 }
-                _this3.captchaId = res.data.captchaId;
-                _this3.imageBase64 = res.data.imageBase64;
+                _this3.captchaId = res.data.captchaId; //验证码id
+                _this3.imageBase64 = res.data.imageBase64; //验证码图片base64
                 _context.next = 11;
                 return _this3.loadImage(_this3.imageBase64);
               case 11:
@@ -294,38 +303,42 @@ var _default = {
               case 13:
                 _this3.showMessage("获取验证码失败: " + (res.message || "未知错误"), "error");
               case 14:
-                _context.next = 20;
+                _context.next = 19;
                 break;
               case 16:
                 _context.prev = 16;
                 _context.t0 = _context["catch"](0);
                 _this3.showMessage("网络错误，请重试", "error");
-                console.error("fetchCaptcha error:", _context.t0);
-              case 20:
-                _context.prev = 20;
+              case 19:
+                _context.prev = 19;
                 _this3.loading = false;
-                return _context.finish(20);
-              case 23:
+                return _context.finish(19);
+              case 22:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 16, 20, 23]]);
+        }, _callee, null, [[0, 16, 19, 22]]);
       }))();
     },
+    //加载base64图片
     loadImage: function loadImage(base64) {
       var _this4 = this;
       return new Promise(function (resolve) {
-        var ctx = uni.createCanvasContext('captchaCanvas', _this4);
-        ctx.clearRect(0, 0, _this4.canvasWidth, _this4.canvasHeight);
-        ctx.drawImage(base64, 0, 0, _this4.canvasWidth, _this4.canvasHeight);
+        var ctx = uni.createCanvasContext('captchaCanvas', _this4); //获取底图
+
+        ctx.clearRect(0, 0, _this4.canvasWidth, _this4.canvasHeight); //清除canvas内容
+
+        ctx.drawImage(base64, 0, 0, _this4.canvasWidth, _this4.canvasHeight); //绘制base64图片
+        // false:不保留之前的绘制内容,第二个参数:绘制完成后的回调(用于生成遮罩)
         ctx.draw(false, function () {
           _this4.imageLoaded = true;
-          _this4.drawOverlay(0);
+          _this4.drawOverlay(0); //生成底图的遮罩
           resolve();
         });
         setTimeout(function () {
           if (!_this4.imageLoaded) {
+            //如果图片加载失败,显示错误信息
             _this4.showMessage("图片加载失败", "error");
             _this4.loading = false;
             resolve();
@@ -333,65 +346,78 @@ var _default = {
         }, 5000);
       });
     },
-    // 生成底图的遮罩
+    // 生成底图的遮罩(默认offsetX为0)
     drawOverlay: function drawOverlay(offsetX) {
-      var ctx = uni.createCanvasContext('captchaOverlayCanvas', this);
-      ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+      var ctx = uni.createCanvasContext('captchaOverlayCanvas', this); //获取遮罩
+      ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight); //清除遮罩内容
+
       ctx.setFillStyle('rgba(0, 0, 0, 1)'); //全遮罩改为1,半透明为0.6,用于查看底图上的图表
-      ctx.fillRect(offsetX, 0, this.canvasWidth - offsetX, this.canvasHeight);
-      ctx.setFillStyle('rgba(255, 255, 255, 0.8)');
-      ctx.fillRect(offsetX, 0, 3, this.canvasHeight);
-      ctx.setStrokeStyle('rgba(255, 255, 255, 0.5)');
-      ctx.setLineWidth(1);
-      ctx.beginPath();
-      ctx.moveTo(offsetX, 0);
-      ctx.lineTo(offsetX, this.canvasHeight);
-      ctx.stroke();
-      ctx.draw();
+      ctx.fillRect(offsetX, 0, this.canvasWidth - offsetX, this.canvasHeight); //绘制遮罩
+
+      ctx.draw(); //开始绘画
     },
-    onTouchStart: function onTouchStart(e) {
-      this.cachedThumbX = this.sliderX;
-      this.startDrag(e.touches[0].clientX);
-    },
-    onTouchMove: function onTouchMove(e) {
-      this.moveDrag(e.touches[0].clientX);
-    },
-    onTouchEnd: function onTouchEnd(e) {
-      this.endDrag();
-    },
+    // 开始拖动
     onThumbTouchStart: function onThumbTouchStart(e) {
-      e.stopPropagation();
-      this.cachedThumbX = this.sliderX;
-      this.startDrag(e.touches[0].clientX);
+      e.stopPropagation(); //防止冒泡
+      this.cachedThumbX = this.sliderX; //存储滑块的当前位置作为拖动的基准点(一般是0)
+      this.startDrag(e.touches[0].clientX); //传入用户手指按下时的X坐标,开始拖动逻辑
     },
+    // 拖动过程中一直触发
     onThumbTouchMove: function onThumbTouchMove(e) {
       e.stopPropagation();
       this.moveDrag(e.touches[0].clientX);
     },
+    //拖动结束(手指松开)
     onThumbTouchEnd: function onThumbTouchEnd(e) {
       e.stopPropagation();
       this.endDrag();
     },
+    // H5 鼠标事件
+    onThumbMouseDown: function onThumbMouseDown(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.cachedThumbX = this.sliderX;
+      this.startDrag(e.clientX);
+      document.addEventListener('mousemove', this.onMouseMove);
+      document.addEventListener('mouseup', this.onMouseUp);
+    },
+    onMouseMove: function onMouseMove(e) {
+      this.moveDrag(e.clientX);
+    },
+    onMouseUp: function onMouseUp(e) {
+      document.removeEventListener('mousemove', this.onMouseMove);
+      document.removeEventListener('mouseup', this.onMouseUp);
+      this.endDrag();
+    },
+    // 开始拖动
     startDrag: function startDrag(clientX) {
+      console.log("开始拖动的时候位置", clientX);
       if (this.loading || !this.imageLoaded) return;
       this.isDragging = true;
-      this.startX = clientX;
-      this.trackStartTime = Date.now();
-      this.track = [];
-      this.message = "";
+      this.startX = clientX; //存储用户开始滑动的坐标
+      this.trackStartTime = Date.now(); //存储开始拖动的时间戳
+      this.track = []; //清空拖动轨迹
+      this.message = ""; //清空提示信息
     },
+    // 拖动过程中一直触发
     moveDrag: function moveDrag(clientX) {
+      console.log("拖动过程中位置", clientX);
       if (!this.isDragging) return;
-      var diff = clientX - this.startX;
+      var diff = clientX - this.startX; //计算用户手指移动的距离
+      console.log("计算用户手指移动的距离", diff, "缓存的距离", this.cachedThumbX);
       var newX = this.cachedThumbX + diff;
+      console.log("计算最新的移动距离", newX);
       var minX = 0;
       var maxX = this.canvasWidth - 40;
-      if (newX < minX) newX = minX;
-      if (newX > maxX) newX = maxX;
+      console.log("最大宽度", this.canvasWidth);
+      if (newX < minX) newX = minX; //修正距离(防止用户一直左滑变为负数)
+      if (newX > maxX) newX = maxX; //修正距离(防止用户一直右滑数值很大)
+
       this.sliderX = Math.round(newX);
       this.recordTrack(this.sliderX);
-      this.drawOverlay(this.sliderX);
+      this.drawOverlay(this.sliderX); //实时更新遮罩的位置
     },
+    // 记录拖动轨迹(用于判断是否为机器人操作)
     recordTrack: function recordTrack(x) {
       var now = Date.now();
       this.track.push({
@@ -399,17 +425,13 @@ var _default = {
         t: now - this.trackStartTime
       });
     },
+    // 拖动结束(手指松开)
     endDrag: function endDrag() {
       if (!this.isDragging) return;
       this.isDragging = false;
-      if (this.sliderX < 5) {
-        this.sliderX = 0;
-        this.track = [];
-        this.drawOverlay(0);
-        return;
-      }
       this.verify();
     },
+    // 滑块松开,执行验证码校验
     verify: function verify() {
       var _this5 = this;
       return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
@@ -424,6 +446,7 @@ var _default = {
                 return (0, _captcha.verifyCaptcha)({
                   captchaId: _this5.captchaId,
                   offsetX: _this5.sliderX,
+                  //当前滑块的位置
                   track: _this5.track
                 });
               case 4:
@@ -435,6 +458,7 @@ var _default = {
                     _this5.handleClose();
                   }, 800);
                 } else {
+                  //验证失败清空相关内容,重新绘制
                   _this5.showMessage(res.message || "验证失败", "error");
                   setTimeout(function () {
                     _this5.sliderX = 0;
@@ -443,14 +467,13 @@ var _default = {
                     _this5.fetchCaptcha();
                   }, 1500);
                 }
-                _context2.next = 12;
+                _context2.next = 11;
                 break;
               case 8:
                 _context2.prev = 8;
                 _context2.t0 = _context2["catch"](0);
                 _this5.showMessage("验证请求失败", "error");
-                console.error("verify error:", _context2.t0);
-              case 12:
+              case 11:
               case "end":
                 return _context2.stop();
             }
@@ -458,14 +481,17 @@ var _default = {
         }, _callee2, null, [[0, 8]]);
       }))();
     },
+    // 刷新图片
     refresh: function refresh() {
       this.reset();
       this.fetchCaptcha();
     },
+    // 关闭弹窗
     handleClose: function handleClose() {
       this.$emit("close");
       this.reset();
     },
+    // 显示提示信息
     showMessage: function showMessage(text, type) {
       this.message = text;
       this.messageType = type;

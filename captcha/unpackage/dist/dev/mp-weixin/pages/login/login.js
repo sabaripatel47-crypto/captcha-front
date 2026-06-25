@@ -204,33 +204,26 @@ var _default = {
                 }
                 return _context.abrupt("return");
               case 2:
-                if (_this.form.username.trim()) {
-                  _context.next = 5;
-                  break;
-                }
-                uni.showToast({
-                  title: "请输入用户名",
-                  icon: "none"
-                });
-                return _context.abrupt("return");
-              case 5:
-                if (_this.form.password) {
-                  _context.next = 8;
-                  break;
-                }
-                uni.showToast({
-                  title: "请输入密码",
-                  icon: "none"
-                });
-                return _context.abrupt("return");
-              case 8:
+                //防抖
+                // //用户名不能为空
+                // if (!this.form.username.trim()) {
+                //   uni.showToast({ title: "请输入用户名", icon: "none" });
+                //   return;
+                // }
+                // //密码不能为空
+                // if (!this.form.password) {
+                //   uni.showToast({ title: "请输入密码", icon: "none" });
+                //   return;
+                // }
+                console.log("执行登录操作", _this.verifyToken);
+                //验证码为空的时候打开验证码校验组件
                 if (_this.verifyToken) {
-                  _context.next = 11;
+                  _context.next = 6;
                   break;
                 }
                 _this.captchaVisible = true;
                 return _context.abrupt("return");
-              case 11:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -273,9 +266,10 @@ var _default = {
                     title: res.message || "登录失败",
                     icon: "none"
                   });
-                  if (res.message && res.message.includes("验证码")) {
+                  if (res.message) {
+                    _this2.logging = false;
                     _this2.verifyToken = ""; //清空token
-                    _this2.captchaVisible = true; //打开验证码组件
+                    _this2.captchaVisible = false; //关闭验证码组件
                   }
                 }
                 _context2.next = 11;

@@ -68,16 +68,17 @@ export default {
     // 登录按钮
     async handleLogin() {
       if (this.logging) return;//防抖
-      //用户名不能为空
-      if (!this.form.username.trim()) {
-        uni.showToast({ title: "请输入用户名", icon: "none" });
-        return;
-      }
-      //密码不能为空
-      if (!this.form.password) {
-        uni.showToast({ title: "请输入密码", icon: "none" });
-        return;
-      }
+      // //用户名不能为空
+      // if (!this.form.username.trim()) {
+      //   uni.showToast({ title: "请输入用户名", icon: "none" });
+      //   return;
+      // }
+      // //密码不能为空
+      // if (!this.form.password) {
+      //   uni.showToast({ title: "请输入密码", icon: "none" });
+      //   return;
+      // }
+      console.log("执行登录操作",this.verifyToken)
       //验证码为空的时候打开验证码校验组件
       if (!this.verifyToken) {
         this.captchaVisible = true;
@@ -107,9 +108,10 @@ export default {
           }, 1000);
         } else {
           uni.showToast({ title: res.message || "登录失败", icon: "none" });
-          if(res.message && res.message.includes("验证码")) {
+          if(res.message) {
+            this.logging = false;
             this.verifyToken = "";//清空token
-            this.captchaVisible = true;//打开验证码组件
+            this.captchaVisible = false;//关闭验证码组件
           }
         }
       } catch (e) {

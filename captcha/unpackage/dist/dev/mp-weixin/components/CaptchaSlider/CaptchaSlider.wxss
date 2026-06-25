@@ -16,7 +16,6 @@
   border-radius: 12px;
   width: 360px;
   max-width: 95vw;
-  overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 .captcha-header.data-v-3ffbf53c {
@@ -58,6 +57,8 @@
   position: relative;
   margin: 12px;
 }
+
+/* 底图图片样式 */
 .captcha-canvas.data-v-3ffbf53c {
   display: block;
   border-radius: 6px;
@@ -121,17 +122,16 @@ to { -webkit-transform: rotate(360deg); transform: rotate(360deg);
 }
 .slider-container.data-v-3ffbf53c {
   margin: 12px auto;
-  width: 320px;
+  width: 340px;
   position: relative;
   height: 40px;
 }
 .slider-track.data-v-3ffbf53c {
   position: relative;
-  width: 320px;
+  width: 340px;
   height: 40px;
   background: #f0f0f0;
   border-radius: 20px;
-  overflow: hidden;
 }
 .slider-progress.data-v-3ffbf53c {
   position: absolute;
