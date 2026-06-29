@@ -250,6 +250,7 @@ var _default = {
                 });
               case 4:
                 res = _context2.sent;
+                console.log("登录结果", res);
                 if (res.code === 200 && res.data) {
                   //存储token和用户名到本地
                   uni.setStorageSync("token", res.data.token);
@@ -262,6 +263,7 @@ var _default = {
                     uni.navigateBack(); //返回上一页(登录之前的那一页)
                   }, 1000);
                 } else {
+                  console.log("登录失败", res);
                   uni.showToast({
                     title: res.message || "登录失败",
                     icon: "none"
@@ -272,25 +274,25 @@ var _default = {
                     _this2.captchaVisible = false; //关闭验证码组件
                   }
                 }
-                _context2.next = 11;
+                _context2.next = 12;
                 break;
-              case 8:
-                _context2.prev = 8;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](1);
                 uni.showToast({
                   title: "网络错误",
                   icon: "none"
                 });
-              case 11:
-                _context2.prev = 11;
+              case 12:
+                _context2.prev = 12;
                 _this2.logging = false;
-                return _context2.finish(11);
-              case 14:
+                return _context2.finish(12);
+              case 15:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[1, 8, 11, 14]]);
+        }, _callee2, null, [[1, 9, 12, 15]]);
       }))();
     },
     // 验证码验证成功

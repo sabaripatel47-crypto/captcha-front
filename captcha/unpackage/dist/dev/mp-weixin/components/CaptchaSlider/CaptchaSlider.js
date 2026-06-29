@@ -217,8 +217,7 @@ var _default = {
       trackStartTime: 0,
       message: "",
       messageType: "",
-      maxSliderX: 0,
-      cachedThumbX: 0
+      maxSliderX: 0
     };
   },
   watch: {
@@ -250,7 +249,7 @@ var _default = {
       this.imageBase64 = "";
       this.clearCanvas();
     },
-    //初始化canvas
+    //初始化canvas(计算出画布的宽高)
     initCanvas: function initCanvas() {
       var _this2 = this;
       var query = uni.createSelectorQuery().in(this); //当前组件实例(this)用于查询对应的元素
@@ -321,7 +320,7 @@ var _default = {
         }, _callee, null, [[0, 16, 19, 22]]);
       }))();
     },
-    //加载base64图片
+    //加载base64图片绘制到canvas底图
     loadImage: function loadImage(base64) {
       var _this4 = this;
       return new Promise(function (resolve) {
@@ -351,23 +350,22 @@ var _default = {
       var ctx = uni.createCanvasContext('captchaOverlayCanvas', this); //获取遮罩
       ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight); //清除遮罩内容
 
-      ctx.setFillStyle('rgba(0, 0, 0, 1)'); //全遮罩改为1,半透明为0.6,用于查看底图上的图表
+      ctx.setFillStyle('rgba(0, 0, 0, 1)'); //全遮罩改为1,半透明为0.6(方便查看遮罩下的底图)
       ctx.fillRect(offsetX, 0, this.canvasWidth - offsetX, this.canvasHeight); //绘制遮罩
 
       ctx.draw(); //开始绘画
     },
-    // 开始拖动
+    // 开始拖动(小程序)
     onThumbTouchStart: function onThumbTouchStart(e) {
       e.stopPropagation(); //防止冒泡
-      this.cachedThumbX = this.sliderX; //存储滑块的当前位置作为拖动的基准点(一般是0)
       this.startDrag(e.touches[0].clientX); //传入用户手指按下时的X坐标,开始拖动逻辑
     },
-    // 拖动过程中一直触发
+    // 拖动过程中一直触发(小程序)
     onThumbTouchMove: function onThumbTouchMove(e) {
       e.stopPropagation();
       this.moveDrag(e.touches[0].clientX);
     },
-    //拖动结束(手指松开)
+    //拖动结束(手指松开)(小程序)
     onThumbTouchEnd: function onThumbTouchEnd(e) {
       e.stopPropagation();
       this.endDrag();
@@ -376,46 +374,47 @@ var _default = {
     onThumbMouseDown: function onThumbMouseDown(e) {
       e.preventDefault();
       e.stopPropagation();
-      this.cachedThumbX = this.sliderX;
       this.startDrag(e.clientX);
       document.addEventListener('mousemove', this.onMouseMove);
       document.addEventListener('mouseup', this.onMouseUp);
     },
+    // 拖动过程中一直触发(H5)
     onMouseMove: function onMouseMove(e) {
       this.moveDrag(e.clientX);
     },
+    // 拖动结束(手指松开)(H5)
     onMouseUp: function onMouseUp(e) {
+      // 移除监听
       document.removeEventListener('mousemove', this.onMouseMove);
       document.removeEventListener('mouseup', this.onMouseUp);
       this.endDrag();
     },
     // 开始拖动
+    //clientX:开始拖动时候的位置(每次不一样,跟你拖动按钮的落点有关,在最左边,距离就小,在最右边,距离就大)
     startDrag: function startDrag(clientX) {
       console.log("开始拖动的时候位置", clientX);
       if (this.loading || !this.imageLoaded) return;
       this.isDragging = true;
       this.startX = clientX; //存储用户开始滑动的坐标
-      this.trackStartTime = Date.now(); //存储开始拖动的时间戳
+      this.trackStartTime = Date.now(); //存储开始拖动的时间戳(用于后续记录每个节点和开始时间的间距)
       this.track = []; //清空拖动轨迹
       this.message = ""; //清空提示信息
     },
     // 拖动过程中一直触发
     moveDrag: function moveDrag(clientX) {
-      console.log("拖动过程中位置", clientX);
+      console.log("拖动过程中位置", clientX, "开始的距离", this.startX);
       if (!this.isDragging) return;
-      var diff = clientX - this.startX; //计算用户手指移动的距离
-      console.log("计算用户手指移动的距离", diff, "缓存的距离", this.cachedThumbX);
-      var newX = this.cachedThumbX + diff;
-      console.log("计算最新的移动距离", newX);
+      var diff = clientX - this.startX; //当前距离减去开始的距离
+      console.log("计算用户手指移动的距离", diff);
       var minX = 0;
-      var maxX = this.canvasWidth - 40;
+      var maxX = this.canvasWidth - 40; //计算最大边界(40是按钮的宽度,此时最大边界是按钮滑到最右边的距离,如果不减40,会导致按钮超出容器)
       console.log("最大宽度", this.canvasWidth);
-      if (newX < minX) newX = minX; //修正距离(防止用户一直左滑变为负数)
-      if (newX > maxX) newX = maxX; //修正距离(防止用户一直右滑数值很大)
+      if (diff < minX) diff = minX; //修正距离(防止用户一直左滑变为负数)
+      if (diff > maxX) diff = maxX; //修正距离(防止用户一直右滑数值很大)
 
-      this.sliderX = Math.round(newX);
+      this.sliderX = Math.round(diff);
       this.recordTrack(this.sliderX);
-      this.drawOverlay(this.sliderX); //实时更新遮罩的位置
+      this.drawOverlay(this.sliderX + 40); //实时更新遮罩的位置(40:让遮罩额外向右移动40的距离,从而实现遮罩完全滑动到最右边)
     },
     // 记录拖动轨迹(用于判断是否为机器人操作)
     recordTrack: function recordTrack(x) {
@@ -442,14 +441,15 @@ var _default = {
               case 0:
                 _context2.prev = 0;
                 _this5.showMessage("验证中...", "info");
-                _context2.next = 4;
+                console.log("轨迹数组", _this5.track);
+                _context2.next = 5;
                 return (0, _captcha.verifyCaptcha)({
                   captchaId: _this5.captchaId,
                   offsetX: _this5.sliderX,
-                  //当前滑块的位置
+                  //当前滑块j距离开始的位置
                   track: _this5.track
                 });
-              case 4:
+              case 5:
                 res = _context2.sent;
                 if (res.code === 200 && res.data) {
                   _this5.showMessage("验证成功!", "success");
@@ -467,18 +467,18 @@ var _default = {
                     _this5.fetchCaptcha();
                   }, 1500);
                 }
-                _context2.next = 11;
+                _context2.next = 12;
                 break;
-              case 8:
-                _context2.prev = 8;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](0);
                 _this5.showMessage("验证请求失败", "error");
-              case 11:
+              case 12:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2, null, [[0, 9]]);
       }))();
     },
     // 刷新图片

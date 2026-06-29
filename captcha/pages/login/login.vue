@@ -97,7 +97,7 @@ export default {
           password: this.form.password,
           verifyToken: this.verifyToken
         });
-
+        console.log("登录结果",res)
         if (res.code === 200 && res.data) {
           //存储token和用户名到本地
           uni.setStorageSync("token", res.data.token);
@@ -107,6 +107,7 @@ export default {
             uni.navigateBack();//返回上一页(登录之前的那一页)
           }, 1000);
         } else {
+          console.log("登录失败",res)
           uni.showToast({ title: res.message || "登录失败", icon: "none" });
           if(res.message) {
             this.logging = false;

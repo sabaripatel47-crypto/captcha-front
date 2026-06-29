@@ -12494,30 +12494,22 @@ function request(options) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.checkVerifyToken = checkVerifyToken;
 exports.getCaptcha = getCaptcha;
 exports.verifyCaptcha = verifyCaptcha;
 var _request = __webpack_require__(/*! @/utils/request */ 54);
+//获取验证码
 function getCaptcha() {
   return (0, _request.request)({
     url: "/api/captcha/get",
     method: "get"
   });
 }
+//校验验证码
 function verifyCaptcha(data) {
   return (0, _request.request)({
     url: "/api/captcha/verify",
     method: "post",
     data: data
-  });
-}
-function checkVerifyToken(verifyToken) {
-  return (0, _request.request)({
-    url: "/api/captcha/check",
-    method: "post",
-    data: {
-      verifyToken: verifyToken
-    }
   });
 }
 
