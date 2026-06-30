@@ -1,5 +1,5 @@
-// const BASE_URL = "http://192.168.3.100:8080";
-const BASE_URL = "http://192.168.1.2:8080";
+const BASE_URL = "http://192.168.3.100:8080";
+// const BASE_URL = "http://192.168.1.2:8080";
 
 
 export function request(options) {

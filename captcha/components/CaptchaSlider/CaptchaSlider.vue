@@ -3,7 +3,7 @@
     <view class="captcha-box">
       <view class="captcha-header">
         <text class="captcha-title">安全验证</text>
-        <text class="captcha-tip">拖动滑块直到出现对应图案</text>
+        <text class="captcha-tip">{{ tip || '拖动滑块直到出现对应图案' }}</text>
         <!-- 关闭弹窗 -->
         <view class="captcha-close" @click="handleClose">
           <text class="close-icon">×</text>
@@ -86,7 +86,7 @@ export default {
       imageBase64: "",
       imageLoaded: false,
       loading: true,
-
+      tip: "",//后端返回的提示文本
       sliderX: 0,
       startX: 0,
       isDragging: false,
@@ -126,6 +126,7 @@ export default {
       this.isDragging = false;
       this.captchaId = "";
       this.imageBase64 = "";
+      this.tip = "";
       this.clearCanvas();
     },
     //初始化canvas(计算出画布的宽高)
@@ -161,6 +162,7 @@ export default {
         if (res.code === 200 && res.data) {
           this.captchaId = res.data.captchaId;//验证码id
           this.imageBase64 = res.data.imageBase64;//验证码图片base64
+          this.tip = res.data.tip || "拖动滑块直到出现对应图案";//后端返回的提示文本，拿不到时用默认文案兜底
           await this.loadImage(this.imageBase64);
         } else {
           this.showMessage("获取验证码失败: " + (res.message || "未知错误"), "error");
