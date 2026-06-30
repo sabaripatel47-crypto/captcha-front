@@ -36,8 +36,8 @@
 	<!-- 下方滚动容器 -->
       <view class="slider-container">
         <view class="slider-track">
-          <!-- 已拖动区域(蓝色背景),40是按钮的宽度 -->
-          <view class="slider-progress" :style="{ width: sliderX+40 + 'px' }"></view>
+          <!-- 已拖动区域(蓝色背景),40是按钮的宽度(这样可以实现蓝色拖尾刚好覆盖按钮) -->
+          <view class="slider-progress" :style="{ width: sliderX+THUMB_WIDTH + 'px' }"></view>
           <view
             class="slider-thumb"
             :style="{ left: sliderX + 'px' }"
@@ -96,6 +96,8 @@ export default {
 
       message: "",
       messageType: "",
+
+      THUMB_WIDTH: 40,
 
       maxSliderX: 0,
     };
@@ -261,7 +263,7 @@ export default {
       let diff = clientX - this.startX;//当前距离减去开始的距离
       console.log("计算用户手指移动的距离",diff)
       const minX = 0;
-      const maxX = this.canvasWidth-40;//计算最大边界(40是按钮的宽度,此时最大边界是按钮滑到最右边的距离,如果不减40,会导致按钮超出容器)
+      const maxX = this.canvasWidth - this.THUMB_WIDTH;
       console.log("最大宽度",this.canvasWidth)
 
       if (diff < minX) diff = minX;//修正距离(防止用户一直左滑变为负数)
@@ -271,7 +273,7 @@ export default {
 
       this.recordTrack(this.sliderX);
 
-      this.drawOverlay(this.sliderX+40);//实时更新遮罩的位置(40:让遮罩额外向右移动40的距离,从而实现遮罩完全滑动到最右边)
+      this.drawOverlay(this.sliderX + this.THUMB_WIDTH);//开始滑动的时候让遮罩从按钮有边界开始滑,从而实现按钮到右边界的时候遮罩完全消失
     },
     // 记录拖动轨迹(用于判断是否为机器人操作)
     recordTrack(x) {
