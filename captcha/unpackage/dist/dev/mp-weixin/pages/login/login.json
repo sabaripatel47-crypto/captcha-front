@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "登录",
   "usingComponents": {
-    "captcha-slider": "/components/CaptchaSlider/CaptchaSlider"
+    "captcha-slider": "../../components/CaptchaSlider/CaptchaSlider"
   }
 }

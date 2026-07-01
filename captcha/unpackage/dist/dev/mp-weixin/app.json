@@ -3,7 +3,6 @@
     "pages/index/index",
     "pages/login/login"
   ],
-  "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "滑动验证码",
