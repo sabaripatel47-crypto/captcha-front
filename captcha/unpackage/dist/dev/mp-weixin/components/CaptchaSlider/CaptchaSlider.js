@@ -210,6 +210,8 @@ var _default = {
       imageBase64: "",
       imageLoaded: false,
       loading: true,
+      tip: "",
+      //后端返回的提示文本
       sliderX: 0,
       startX: 0,
       isDragging: false,
@@ -217,6 +219,7 @@ var _default = {
       trackStartTime: 0,
       message: "",
       messageType: "",
+      THUMB_WIDTH: 40,
       maxSliderX: 0
     };
   },
@@ -247,6 +250,7 @@ var _default = {
       this.isDragging = false;
       this.captchaId = "";
       this.imageBase64 = "";
+      this.tip = "";
       this.clearCanvas();
     },
     //初始化canvas(计算出画布的宽高)
@@ -289,35 +293,36 @@ var _default = {
               case 5:
                 res = _context.sent;
                 if (!(res.code === 200 && res.data)) {
-                  _context.next = 13;
+                  _context.next = 14;
                   break;
                 }
                 _this3.captchaId = res.data.captchaId; //验证码id
                 _this3.imageBase64 = res.data.imageBase64; //验证码图片base64
-                _context.next = 11;
+                _this3.tip = res.data.tip || "拖动滑块直到出现对应图案"; //后端返回的提示文本，拿不到时用默认文案兜底
+                _context.next = 12;
                 return _this3.loadImage(_this3.imageBase64);
-              case 11:
-                _context.next = 14;
+              case 12:
+                _context.next = 15;
                 break;
-              case 13:
-                _this3.showMessage("获取验证码失败: " + (res.message || "未知错误"), "error");
               case 14:
-                _context.next = 19;
+                _this3.showMessage("获取验证码失败: " + (res.message || "未知错误"), "error");
+              case 15:
+                _context.next = 20;
                 break;
-              case 16:
-                _context.prev = 16;
+              case 17:
+                _context.prev = 17;
                 _context.t0 = _context["catch"](0);
                 _this3.showMessage("网络错误，请重试", "error");
-              case 19:
-                _context.prev = 19;
+              case 20:
+                _context.prev = 20;
                 _this3.loading = false;
-                return _context.finish(19);
-              case 22:
+                return _context.finish(20);
+              case 23:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 16, 19, 22]]);
+        }, _callee, null, [[0, 17, 20, 23]]);
       }))();
     },
     //加载base64图片绘制到canvas底图
@@ -407,14 +412,14 @@ var _default = {
       var diff = clientX - this.startX; //当前距离减去开始的距离
       console.log("计算用户手指移动的距离", diff);
       var minX = 0;
-      var maxX = this.canvasWidth - 40; //计算最大边界(40是按钮的宽度,此时最大边界是按钮滑到最右边的距离,如果不减40,会导致按钮超出容器)
+      var maxX = this.canvasWidth - this.THUMB_WIDTH;
       console.log("最大宽度", this.canvasWidth);
       if (diff < minX) diff = minX; //修正距离(防止用户一直左滑变为负数)
       if (diff > maxX) diff = maxX; //修正距离(防止用户一直右滑数值很大)
 
       this.sliderX = Math.round(diff);
       this.recordTrack(this.sliderX);
-      this.drawOverlay(this.sliderX + 40); //实时更新遮罩的位置(40:让遮罩额外向右移动40的距离,从而实现遮罩完全滑动到最右边)
+      this.drawOverlay(this.sliderX + this.THUMB_WIDTH); //开始滑动的时候让遮罩从按钮有边界开始滑,从而实现按钮到右边界的时候遮罩完全消失
     },
     // 记录拖动轨迹(用于判断是否为机器人操作)
     recordTrack: function recordTrack(x) {
