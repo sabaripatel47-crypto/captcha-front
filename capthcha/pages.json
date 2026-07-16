@@ -5,34 +5,14 @@
 			"style": {
 				"navigationBarTitleText": "滑动验证码"
 			}
-		},
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
 		}
 	],
 
-	"tabBar": {
-		"color": "#999999",
-		"selectedColor": "#007AFF",
-		"backgroundColor": "#ffffff",
-		"borderStyle": "black",
-		"list": [
-			{
-				"pagePath": "pages/index/index",
-				"text": "首页",
-				"iconPath": "/static/lighting.png",
-				"selectedIconPath": "/static/lighting-active.png"
-			},
-			{
-				"pagePath": "pages/login/login",
-				"text": "登录",
-				"iconPath": "/static/lighting.png",
-				"selectedIconPath": "/static/lighting-active.png"
-			}
-		]
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^captcha-(.*)": "@/components/captcha-$1/captcha-$1.vue"
+		}
 	},
 
 	"globalStyle": {
@@ -40,7 +20,5 @@
 		"navigationBarTitleText": "滑动验证码",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
-	},
-
-	"uniIdRouter": {}
+	}
 }
